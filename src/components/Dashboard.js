@@ -6,7 +6,7 @@ import Header from './Header';
 import Sidebar from './Sidebar';
 import Content from './Content';
 import Footer from './Footer';
-import themes from '../styles';
+import Themes from '../styles';
 
 import {
   boxedLayoutMaxWidth,
@@ -44,19 +44,29 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this._sidebarToggle = this.sidebarToggle.bind(this);
-
+    
+    this.themeProvider = props.defaultValue;
+    
     this.state = {
       sidebarCollapse: this.props.initialCollapse,
+      theme: this.setTheme('default')   
     };
   }
-
+  
+  setTheme(newTheme) {
+    return {
+      theme: this.themeValues.getTheme(newTheme), // default value
+      toggleTheme: (name) => this.setState( {theme: this.setTheme(name)} ),
+      getTheme: this.themeValues.getTheme
+    }
+  }
+  
   sidebarToggle() { this.setState({ sidebarCollapse: !this.state.sidebarCollapse }); }
 
   render() {
-    const theme = themes[this.props.theme];
     return (
       <StyledDashboard>
-        <ThemeProvider theme={theme}>
+        <Themes.Provider value={this.state.theme}>
           <Header
             logoOnClick={this.props.logoOnClick}
             logoHref={this.props.logoHref}
@@ -69,8 +79,7 @@ class Dashboard extends React.Component {
           >
             {this.props.navbarChildren}
           </Header>
-        </ThemeProvider>
-        <ThemeProvider theme={theme}>
+        
           <Sidebar
             fixed={this.props.fixed}
             sidebarCollapse={this.state.sidebarCollapse}
@@ -78,8 +87,7 @@ class Dashboard extends React.Component {
           >
             {this.props.sidebarChildren}
           </Sidebar>
-        </ThemeProvider>
-        <ThemeProvider theme={theme}>
+          
           <Content
             fixed={this.props.fixed}
             name="content-wrapper"
@@ -88,15 +96,14 @@ class Dashboard extends React.Component {
           >
             {this.props.children}
           </Content>
-        </ThemeProvider>
-        <ThemeProvider theme={theme}>
+        
           <Footer
             sidebarCollapse={this.state.sidebarCollapse}
             sidebarMini={this.props.sidebarMini}
           >
             {this.props.footerChildren}
           </Footer>
-        </ThemeProvider>
+        </Themes.Provider>
       </StyledDashboard>
     );
   }
@@ -124,4 +131,5 @@ Dashboard.defaultProps = {
   theme: 'skin-blue',
 };
 
-export default Dashboard;
+// export a consumer with no parent to receive defaultValue for ThemeContext .. yes we could have imported it but this is cooler !
+export default (props)=><Theme.Consumer>{defaultValue=><Dashboard defaultValue={defaultValue} ...props />}</Theme.Consumer>;
