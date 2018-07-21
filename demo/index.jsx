@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
 
-import App, { reducer } from './AppContainer';
+import App from './App';
 import Documentation from './Documentation';
 
 // Make allowances for gh-pages routing
@@ -18,7 +18,6 @@ if (GH_PAGES) { // eslint-disable-line no-undef
 // Add the reducer to your store on the `routing` key
 const store = createStore(
   combineReducers({
-    app: reducer,
     routing: routerReducer,
   }),
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
