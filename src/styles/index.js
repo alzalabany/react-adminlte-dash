@@ -11,7 +11,7 @@ import redLight from './skin-red-light';
 import yellow from './skin-yellow';
 import yellowLight from './skin-yellow-light';
 
-export default {
+const themes = {
   'skin-black': black,
   'skin-black-light': blackLight,
   'skin-blue': blue,
@@ -25,3 +25,9 @@ export default {
   'skin-yellow': yellow,
   'skin-yellow-light': yellowLight,
 };
+
+
+export default React.createContext({
+  theme: themes['skin-purple'], // default value
+  toggleTheme: () => { console.warn('cannot toogle theme before initializing it') },
+});
