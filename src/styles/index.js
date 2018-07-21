@@ -26,8 +26,10 @@ const themes = {
   'skin-yellow-light': yellowLight,
 };
 
+const defaultTheme = 'skin-purple';
 
 export default React.createContext({
-  theme: themes['skin-purple'], // default value
+  theme: themes[defaultTheme], // default value
   toggleTheme: () => { console.warn('cannot toogle theme before initializing it') },
+  getTheme: (name) => name ? themes[name] || themes[defaultTheme] : themes // getOne.. or getAll
 });
